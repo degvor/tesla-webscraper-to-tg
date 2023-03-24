@@ -29,3 +29,21 @@ def get_news(url):
         url = item.a.get('href')
         news.add((title, url))
     return news
+
+# main loop
+while True:
+    try:
+        news = get_news(url_site)
+        # finding only new news
+        new_news = news - last_news
+        # posting news to tg channel
+        for item in new_news:
+            title, url = item
+            url = url_site + url
+            send_message(title, url)
+        # reload last news
+        last_news = news
+    except Exception as e:
+        print(e)
+    # time delay for next check
+    time.sleep(15)
