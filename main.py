@@ -17,3 +17,15 @@ def send_message(title, url):
     message = title + '\n' + url
     response = requests.get(telegram_url + message)
     return response.json()
+
+# function for scraping data from site
+def get_news(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    news_list = soup.find_all('p', class_='h3')
+    news = set()
+    for item in news_list:
+        title = item.a.text.strip()
+        url = item.a.get('href')
+        news.add((title, url))
+    return news
